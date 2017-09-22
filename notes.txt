@@ -1,0 +1,40 @@
+Ideally we will be able to create cores on demand using any vocabulary daimon that exists in the architecture.
+The flow would look like, an admin logs into atlas and views the available cores
+If there is a vocabulary without an available core an administrator can click a button to create a new core for a vocabulary
+We should only have one core per vocabulary version
+Once a core exists for a vocabulary then any searches should leverage that core for vocabulary search features instead of the sql query.
+
+## How do we on-demand create a core using the solr api?
+
+/v2/cores/
+  command=create
+  name=vocab_vn
+  loadOnStartup=true
+  async=specified_identifier?
+
+  ## How does the OHDSI WebAPI check which cores exist?
+
+  ## How does the OHDSI WebAPI know if there is a solr server available?
+
+  ## How do we configure the solr image to have necessary resources for indexing the relational database with the vocabulary.
+  The data-config.xml file has to be configured with the connection information, query and the schema of the data.
+
+  solrconfig.xml needs to have an instruction to load the drivers for the data importer.
+
+  schema.xml needs to have the schema defined by name and properties
+
+  core.properties needs to have a name for a core to be defined.
+
+  Below is my conversation from freenode.net in the #solr irc channel
+
+[13:11] == ohdsi-dev [94b16075@gateway/web/freenode/ip.148.177.96.117] has joined #solr
+[13:19] <ohdsi-dev> hi, I'm looking for help in using the v2 rest api to configure a new core with a relational database as the source of the index, is that possible to do?
+[13:36] <@elyograg> ohdsi-dev: the v2 API is still under development.  Until it's finished, production usage should be using the current API.
+[13:39] <ohdsi-dev> Ok, thanks.  In that case, is it possible to create a new core with a new data-config.xml and prespecified schema.xml through the current API?
+[13:40] <@elyograg> if you're running SolrCloud, then you can upload a config and create a collection with entirely remote access.  With standalone Solr, you must place the config files before you create the core.
+[13:43] <ohdsi-dev> Ok, I've only been looking at standalone so far.  I'll go read up on SolrCloud before going further.  Thanks.
+[13:44] <@elyograg> with SolrCloud, the active config files are in the zookeeper database, which you can manipulate through remote calls.  The collection creation call in Solr lets you reference a config by name.
+[13:45] <@elyograg> ZK is a separate Apache project, a system for managing clusters.
+
+So it appears as if the automatic configuration of a new core is not possible unless we're using SolrCloud
+For now I'll attempt to bring WebAPI online with existing vocabulary cores and testing functionality that way.

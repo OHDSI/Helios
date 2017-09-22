@@ -1,0 +1,31 @@
+<dataConfig>
+	<dataSource driver="org.postgresql.Driver" url="jdbc:postgresql://YOUR_SERVER:5432/YOUR_DATABASE" user="USERNAME" password="PASSWORD"/>
+	<document name='concept'>
+		<entity
+			name="concept"
+			dataSource="cdm1"
+			pk="concept_id"
+			query="
+				select CONCEPT_ID,
+					CONCEPT_NAME,
+					COALESCE(STANDARD_CONCEPT,'N') STANDARD_CONCEPT,
+					COALESCE(INVALID_REASON,'V') INVALID_REASON,
+					CONCEPT_CODE,
+					CONCEPT_CLASS_ID,
+					DOMAIN_ID,
+					VOCABULARY_ID
+				from public.CONCEPT
+			"
+			preImportDeleteQuery="*:*">
+
+			<field column="CONCEPT_ID" name="CONCEPT_ID"/>
+			<field column="CONCEPT_NAME" name="CONCEPT_NAME"/>
+			<field column="STANDARD_CONCEPT" name="STANDARD_CONCEPT"/>
+			<field column="INVALID_REASON" name="INVALID_REASON"/>
+			<field column="CONCEPT_CODE" name="CONCEPT_CODE"/>
+			<field column="CONCEPT_CLASS_ID" name="CONCEPT_CLASS_ID"/>
+			<field column="DOMAIN_ID" name="DOMAIN_ID"/>
+			<field column="VOCABULARY_ID" name="VOCABULARY_ID"/>
+		</entity>
+	</document>
+</dataConfig>

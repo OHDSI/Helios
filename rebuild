@@ -1,0 +1,6 @@
+#!/bin/bash
+docker kill ohdsi-solr
+docker container rm ohdsi-solr
+docker image rm ohdsi-solr
+docker build -t ohdsi-solr .
+docker run --name ohdsi-solr -d -p 8983:8983 -t ohdsi-solr
